@@ -1,0 +1,1 @@
+如图,四边形$ABCD$中,$AC$平分$\angle DAB$,$\angle ADC=\angle ACB=90^\circ $,$E$为$AB$的中点，(1)求证:${{AC}^{2}}=AB\cdot AD$;#%#(2)求证:$CE\parallel AD$;#%#(3)若$AD=4$,$AB=6$,求$\frac{AC}{AF}$的值.

@@ -1,0 +1,2 @@
+任意四边形ABCD中，点E、F、G、H分别是AB、BC、CD、DA的中点,证明：EFGH是平行四边形
+

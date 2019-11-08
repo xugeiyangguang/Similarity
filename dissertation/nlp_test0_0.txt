@@ -1,0 +1,2 @@
+任意 四边形 ABCD 中 ， 点 E 、 F 、 G 、 H 分别 是 AB 、 BC 、 CD 、 DA 的 中点 , 证明 ： EFGH 是 平行四边形 
+ 
