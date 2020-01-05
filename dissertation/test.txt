@@ -1,1 +1,1 @@
-如图,四边形$ABCD$中,$AC$平分$\angle DAB$,$\angle ADC=\angle ACB=90^\circ $,$E$为$AB$的中点，(1)求证:${{AC}^{2}}=AB\cdot AD$;#%#(2)求证:$CE\parallel AD$;#%#(3)若$AD=4$,$AB=6$,求$\frac{AC}{AF}$的值.
+若$a=\frac{1}{2}^{0.3}$,$b＝0.3^{-2}$,$c=log_{\frac{1}{2}}2$，则a，b，c的大小关系为( ),A、a＞b＞c #%#B、a＞c＞b#%#C、 c＜b＞a#%#D、b＞a＞c#%#

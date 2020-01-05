@@ -2,10 +2,13 @@
 # 输出某单个题目的知识点
 import jieba
 from gensim import corpora,models,similarities
+# from AllQuestionAndKownledge import keyword
+#from .AllQuestionAndKownledge import keyword
 import pandas as pd
 import re
 import os
 import csv
+
 
 jieba.load_userdict("NewDict.txt")   # 加载用户自定义词典
 
@@ -35,6 +38,40 @@ tmp = pd.read_csv('C:/Users/27124/Desktop/毕业论文/dissertation/初等数学知识点运
 kown_list.append(tmp)
 kownledges = pd.concat(kown_list)
 
+keyword = []       # 保存为关键字
+with open('C:/Users/27124/Desktop/毕业论文/dissertation/初等数学知识点.csv', 'r', encoding='utf-8') as f1:
+    reader = csv.reader(f1)
+    dictt = {}
+    kownledge_listt = set()
+    for i,row in enumerate(reader):
+        if i>0:
+            value = ""  # 知识点名称
+            count = 0
+            key = ""   # 路径
+            words = ""  # 关键字
+
+            for j,tmp in enumerate(row):
+                t = row[j]
+                if j<len(row)-1 and row[j+1] != "":
+                    if key == '':
+                        key = tmp
+                    else:
+                        key = key + "-->" + tmp
+
+                else:
+                    words = tmp
+                    value = row[j-1]
+                    break
+            dictt[value] = key  # 将知识点名称，路径保存为字典
+            kownledge_listt.add(value)
+            list_tmp = []
+            list_tmp.append(value)
+            tmp_words = words.split('，')
+            for i in range(len(tmp_words)):
+                keyword.append(tmp_words[i])
+            list_tmp.append(key)
+        #    csv_writer.writerow(list_tmp)  # 将三者保写入文件中
+print("一共包含知识点：",len(kownledge_listt))
 
 # 1.分词
 
@@ -65,8 +102,10 @@ test_file = open('test.txt', 'r', encoding="utf-8")
 test_content = test_file.read()
 print("测试的句子是", test_content)
 doc_test_list=[word for word in jieba.cut(test_content) if word not in stopWords_list]
+doc_test_list11 = [word for word in doc_test_list if word in keyword]
 doc_test_list1 = [word for word in doc_test_list if re.match("([\u4E00-\u9FA5]+)|sin|cos|log|cot|lim|dx|parallel|overrightarrow|vec",word)]
-print("测试句子分词的结果是：", doc_test_list1)
+doc_test_list2 = set(doc_test_list1)
+print("测试句子分词的结果是：", doc_test_list2)
 
 # 2.制作语料库
 dictionary = corpora.Dictionary(all_doc_list)   # 用dictionary方法获取词袋（bag-of-words)
@@ -76,7 +115,7 @@ dictionary.token2id   # 编号与词之间的对应关系
 print("特征词的个数为", len(dictionary.keys()))
 corpus = [dictionary.doc2bow(doc) for doc in all_doc_list]   # 使用doc2bow制作语料库
 
-doc_test_vec = dictionary.doc2bow(doc_test_list1)  # 将测试句子也转换为稀疏向量
+doc_test_vec = dictionary.doc2bow(doc_test_list2)  # 将测试句子也转换为稀疏向量
 
 # 3. 相似度分析
 tfidf = models.TfidfModel(corpus)   # 使用TF-IDF模型对语料库建模

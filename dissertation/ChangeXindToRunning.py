@@ -1,6 +1,6 @@
 import pandas as pd
 import csv
-# 将从思维导图导出的文件转换为为其他程序执行的知识点列表文件“初等数学知识点运行版”
+# 将从思维导图导出的文件“初等数学知识点.csv”转换为为其他程序执行的知识点列表文件“初等数学知识点运行版”
 csvfile = open('C:/Users/27124/Desktop/毕业论文/dissertation/初等数学知识点运行版.csv', 'w', encoding='utf-8', newline="")
 csv_writer = csv.writer(csvfile)
 csv_writer.writerow(["名称", "关键字", "路径"])

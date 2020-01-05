@@ -12,9 +12,11 @@ csvfile = open('C:/Users/27124/Desktop/±ÏÒµÂÛÎÄ/dissertation/³õµÈÊıÑ§ÖªÊ¶µãÔËĞĞ°
 csv_writer = csv.writer(csvfile)
 csv_writer.writerow(["Ãû³Æ", "¹Ø¼ü×Ö", "Â·¾¶"])
 
+
 ff=open('C:/Users/27124/Desktop/±ÏÒµÂÛÎÄ/dissertation/³õµÈÊıÑ§ÖªÊ¶µã.csv', 'rb')
 questionn = pd.read_csv(ff, encoding='utf-8')
 questionn.drop([0,1])
+keyword = []       # ±£´æÎª¹Ø¼ü×Ö
 with open('C:/Users/27124/Desktop/±ÏÒµÂÛÎÄ/dissertation/³õµÈÊıÑ§ÖªÊ¶µã.csv', 'r', encoding='utf-8') as f1:
     reader = csv.reader(f1)
     dictt = {}
@@ -42,10 +44,19 @@ with open('C:/Users/27124/Desktop/±ÏÒµÂÛÎÄ/dissertation/³õµÈÊıÑ§ÖªÊ¶µã.csv', 'r'
             kownledge_listt.add(value)
             list_tmp = []
             list_tmp.append(value)
-            list_tmp.append(words)
+            tmp_words = words.split('£¬')
+            for i in range(len(tmp_words)):
+                keyword.append(tmp_words[i])
             list_tmp.append(key)
             csv_writer.writerow(list_tmp)  # ½«ÈıÕß±£Ğ´ÈëÎÄ¼şÖĞ
 print("Ò»¹²°üº¬ÖªÊ¶µã£º",len(kownledge_listt))
+
+#°ÑËùÓĞÌâÄ¿ÖĞµÄ¹Ø¼ü´ÊËÑ¼¯ÆğÀ´
+csvfileKey = open('C:/Users/27124/Desktop/±ÏÒµÂÛÎÄ/dissertation/ÌâÄ¿µÄ¹Ø¼ü´Ê.csv', 'w', encoding='utf-8', newline="")
+csv_writer = csv.writer(csvfileKey)
+csv_writer.writerow(["¹Ø¼ü´Ê"])
+csv_writer.writerow(keyword)
+
 
 
 jieba.load_userdict("NewDict.txt")   # ¼ÓÔØÓÃ»§×Ô¶¨Òå´Êµä
@@ -121,8 +132,10 @@ for index, row in question.iterrows():
     txt_encode = row["content"].encode('utf-8')
     doc_test_list=[word for word in jieba.cut(txt_encode) if word not in stopWords_list]
     doc_test_list1 = [word for word in doc_test_list if re.match("([\u4E00-\u9FA5]+)|sin|cos|log",word)]
+    doc_test_list11 = [word for word in doc_test_list1 if word in keyword]
+    doc_test_list2 = set(doc_test_list11)
 
-    doc_test_vec = dictionary.doc2bow(doc_test_list1)  # ½«²âÊÔ¾ä×ÓÒ²×ª»»ÎªÏ¡ÊèÏòÁ¿
+    doc_test_vec = dictionary.doc2bow(doc_test_list2)  # ½«²âÊÔ¾ä×ÓÒ²×ª»»ÎªÏ¡ÊèÏòÁ¿
 
     tfidf[doc_test_vec]  # »ñÈ¡²âÊÔÎÄµµÖĞ£¬Ã¿¸ö´ÊµÄTF-IDFÖµ
     index = similarities.SparseMatrixSimilarity(tfidf[corpus], num_features=len(dictionary.keys()))  # ¶ÔÃ¿¸öÄ¿±êÎÄµµ£¬·ÖÎö²âÊÔÎÄµµµÄÏàËÆ¶È
@@ -136,7 +149,7 @@ for index, row in question.iterrows():
     d_order = sorted(result.items(), key=lambda x: x[1], reverse=True)
     row_list=[]
     row_list.append(txt_encode.decode('utf-8'))
-    row_list.append(doc_test_list1)
+    row_list.append(doc_test_list2)
     kown_lists = []
     for i in range(5):
         kown_lists.append(d_order[i][0])

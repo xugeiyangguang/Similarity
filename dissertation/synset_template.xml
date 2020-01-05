@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--        使用说明
+*%XXX_n% 其中XXX是NER标签名，n表示序号；变量后不能有?表示可选
+*一个Action template，有多个pattern 节点时，其中的变量必须相同
+* ner tag 必须和NamedEntityType 定义的相同
+
+1、<synset name="action" core_term="import" expr="!|etc/action.dict"/>
+    如果core_term = import 需要从expr表示的文件来读取变量填充expr
+    expr若以‘|’分开，前面的符合代表该sysnet的重要性，后面的代码文件所在的路径
+    重要性：（1） "!" 重要关键词
+             （2）"N_I" 不重要的词
+             （3）"?@category#" 命名组
+
+2、优先级 	<template id="PLAY_0" prohibit="PLAY_SONG|PLAY_ARTIST_0|PLAY_ARTIST_1">
+    PLAY_0的优先级高于prohibit中的id，若同时匹配到这几个template，只返回优先级最高的template
+ -->
+<templates domainId="cn.tsinghuabigdata.synset">
+    <tags>
+        <tag name="synset"/>
+    </tags>
+
+    <synsets>
+        <synset name="AND" core_term="和,与,为符号" expr="N_I和|与|,|，|并|及|以及|且|而且|且与|及其|、|并且"/>是为
+        <synset name="与和" core_term="和,与,为符号" expr="N_I和|与|并|及|以及|且|而且|且与|及其|并且"/>
+        <synset name="前后" core_term="前后" expr="!?@fb#前|后" />
+        <synset name="角" core_term="角,∠符号" expr="N_I角|∠|底角|顶角"/>
+        <synset name="ANGLE" core_term="角,∠符号" expr="N_I角|∠|∠" />
+        <synset name="ANGLE_TYPE" core_term="钝角,直角,锐角为符号" expr="!?@angleType#钝角|直角|锐角|平角"/>
+        <synset name="AT" core_term="在" expr="N_I都在|在|位于|落在|于|过|经过"/>
+        <synset name="exprAndEnglish" core_term="表达式和字母" expr="!?@exprAndEnglishWord#%expr%|%字母%"/>
+        <synset name="exprAndNumber" core_term="表达式和字母" expr="!?@exprAndNumber#%expr%|%数字%|%数字1%"/>
+        <synset name="数字和字母" core_term="数字和字母" expr="!?@NumberAndWord#%expr%|%字母%|%数字%"/>
+        <synset name="GRAPHICS" core_term="图像" expr="!平行四边形|矩形|梯形|菱形|四边形|扇形|□|△"/>
+        <synset name="STYLE" core_term="折叠图像类型" expr="!等边|等腰|Rt"/>
+        <synset name="一个" core_term="一个" expr="N_I一|个|一个"/>
+        <synset name="一点" core_term="一点" expr="N_I一|点|(另|)一点"/>
+        <synset name="三角形1" core_term="三角形" expr="N_I△|三角形|3角形" />
+        <synset name="三角形" core_term="等边,等腰为符号" expr="!?@triangleType#等边|等腰|正|斜|直角|R|RT|Rt|三角形|△|等腰直角|等腰Rt|等腰RT|钝角|锐角|3角形|不确定"/>
+        <synset name="且" core_term="并且" expr="!且|并|并且|而且"/>
+        <synset name="两点" core_term="两点" expr="!两点|2|2点|二|二点"/>
+        <synset name="两线" core_term="两线" expr="!两线|2|2线|二|二线"/>
+        <synset name="两角关系" core_term="同位角，内错角，同旁内角，对顶角，余角，补角" expr="!?@angleForm#余角|补角|同位角|内错角|同旁内角|对顶角|补|余"/>
+        <synset name="为" core_term="为" expr="N_I为" />
+        <synset name="乘以" core_term="乘以" expr="!\*|乘|乘以"/>
+        <synset name="交于" core_term="交于" expr="!(相|)交于|(相|)交|∩"/>
+        <synset name="交点" core_term="交点" expr="!交|交点|点"/>
+        <synset name="公共点" core_term="交点" expr="!公共点|交点|共同点"/>
+        <synset name="代入" core_term="代入" expr="!代入|带入"/>
+        <synset name="对称" core_term="对称" expr="!对称" />
+        <synset name="使得" core_term="使得" expr="N_I使|使得|使以"/>
+        <synset name="做" core_term="做作" expr="!做|作|引"/>
+        <synset name="作" core_term="做作" expr="!做|作|引|画"/>
+        <synset name="全等" core_term="全等" expr="!?@congruent#≌|≅|全等"/>
+        <synset name="三角函数" core_term="三角函数" expr="!?@trigonometric#正弦|余弦|正切|余切"/>
+        <synset name="求解方法" core_term="求解方法" expr="!?@appointed#(求根|)公式法|加减消元法|分解因式|因式分解(法|)|代入(消元|)法|配方法|直接开平方法|图象法|等式的性质|不等式的性质|整体思想|消元法|待定系数法|换元法"/>
+        <synset name="全等定理" core_term="全等定理" expr="!?@congruentTheorem#HL|SSS|SAS|ASA|AAS"/>
+        <synset name="内容" core_term="内容" expr="!?@contentGroup#(.*?){2,3}"/>
+        <synset name="文字内容" core_term="文字内容非空" expr="!?@wordGroup#.+?" />
+        <synset name="知识点类型" core_term="知识点" expr="!?@KnowledgePoint#(勾股定理|三角形全等的性质|三角形的内角和为180°|矩形的四个角都是直角|全等三角形的对应角相等|三角形内角和定理|全等三角形的对应边相等|内角互补,两直线平行|两直线平行,内错角相等|三角形中位线定理|平行线分线段成比例定理|对顶角相等|平移的性质|三角形的三边关系)" />
+        <synset name="函数类型" core_term="函数类型" expr="!?@functionType#反比例|反比例函数|正比例|正比例函数|一次|一次函数|二次|二次函数|函数"/>
+        <synset name="到" core_term="到至得" expr="N_I到|至|得到|记|记作|记做|所得到"/>
+        <synset name="原式" core_term="原式" expr="!原式|分式|原代数式"/>
+        <synset name="变形" core_term="变为，化为" expr="!变形|变为|化为|可化为"/>
+        <synset name="变量个数" core_term="方程变量的个数" expr="!?@varNum#一元|二元|三元"/>
+        <synset name="周长" core_term="周长" expr="!?@Perimeter#周长|((三|四|五|六)边(长|)之和)"/>
+        <synset name="设" core_term="周长" expr="!?@assume#设|令|假设"/>
+        <synset name="周长面积" core_term="周长或面积" expr="!?@areaOrPerimeter#周长|面积"/>
+        <synset name="周长面积图形" core_term="图形"	expr="!?@areaOrPerimeterType#三角形|圆|扇形|阴影|弧|△" />
+        <synset name="四边形" core_term="全部四边形"
+                expr="!?@quadrilateralType#平行四边形|四边形|长方形|正方形|菱形|矩形|平行□|等腰梯形|等腰直角梯形|直角梯形|梯形|Rt梯形|□|4边形|平行4边形|筝形" />
+        <synset name="四边形1" core_term="四边形" expr="N_I四边形|□|4边形" />
+        <synset name="因为" core_term="因为" expr="N_I因为|∵"/>
+        <synset name="围绕" core_term="围绕" expr="!围绕|绕|围着|绕着|围绕着|围"/>
+        <synset name="圆" core_term="圆" expr="!?@circleConfig#圆|⊙|圆心|半圆"/>
+        <synset name="圆径" core_term="圆的半径或直径" expr="!?@circleDiameter#半径|直径"/>
+        <synset name="圆角" core_term="和圆相关的角" expr="!?@circleType#圆心角|弦切角|圆周角"/>
+        <synset name="圆的特征" core_term="圆的特征" expr="!?@circleCharacter#解析式|(标准|)方程|直径|半径"/>
+        <synset name="坐标轴" core_term="x轴y轴" expr="!?@axis#x轴|y轴|x,y轴|x轴(的|)正半轴|x轴(的|)负半轴|y轴(的|)正半轴|y轴(的|)负半轴"/>
+        <synset name="坐标轴方向" core_term="正半轴" expr="!?@axisDirection#负半轴|正半轴|x轴正向|y轴正向"/>
+        <synset name="坐标系" core_term="直角坐标系" expr="!?@CoordinateSystem#平面直角坐标(系|)|直角坐标(系|)|极坐标(系|)"/>
+        <synset name="坐标属性" core_term="极直角坐标" expr="!?@coordinateType#直角坐标|极坐标"/>
+        <synset name="垂直" core_term="垂直" expr="!垂直于|垂直|⊥"/>
+        <synset name="字母1" core_term="字符串的连续英文" expr="!?@englishWord1#[a-zA-Z]+" />
+        <synset name="字母" core_term="关于x的方程" expr="!?@englishWord#[a-z]"/>
+        <synset name="大写字母" core_term="关于x的方程" expr="!?@pointWord#[A-Z]"/>
+        <synset name="全部字母" core_term="关于x的方程" expr="!?@bigEnglishWord#[A-Za-z]"/>
+        <synset name="希腊字母" core_term="希腊字母" expr="!?@greekWord#α|λ|θ|∂|ρ|β|γ|η|δ|ω|φ|ϕ|μ"/>
+        <synset name="将" core_term="将" expr="!将|把" />
+        <synset name="将把" core_term="将把" expr="N_I将|把|以"/>
+        <synset name="任意" core_term="任意都有一切" expr="!任意|任一|任何|一切|所有|"/>
+        <synset name="左右" core_term=">|＜" expr="!?@leftOrRight#>|＜|左|右"/>
+        <synset name="上下" core_term=">|＜" expr="!?@upOrDown#>|＜|上|下"/>
+        <synset name="上下左右" core_term=">|＜" expr="!?@direction#>|＜|上|下|左|右"/>
+        <synset name="平行" core_term="平行" expr="!?@parallel#平行于|平行|∥"/>
+        <synset name="弧" core_term="弧的类型" expr="!?@arcType#优⌒|劣⌒|优弧|劣弧|弧|⌒|圆弧"/>
+        <synset name="得" core_term="得" expr="!得|的|得到|可得|有|则有|为" />
+        <synset name="心" core_term="外心内心" expr="!?@Heart#外心|内心|垂心|重心"/>
+        <synset name="或" core_term="或" expr="!或|或者"/>
+        <synset name="截取" core_term="截取" expr="!截|取|截取|作|做"/>
+        <synset name="所以" core_term="所以" expr="N_I所以|∴"/>
+        <synset name="所求" core_term="所求" expr="N_I所求"/>
+        <synset name="无论" core_term="无论" expr="N_I不论|不管"/>
+        <synset name="按照" core_term="按照" expr="N_I按|照|安|安照|按照|沿|沿着"/>
+        <synset name="接" core_term="内接外接" expr="!?@connection#内接|外接"/>
+        <synset name="操作" core_term="方程两边同时乘以除以等" expr="!?@equationOperator#同乘|乘以|同除|除以|加|减|乘|平方|立方|开方"/>
+        <synset name="依据" core_term="依据" expr="N_I由|则由|根据|依据|依|据|如图|从" />
+        <synset name="依据条件" core_term="依据条件"
+                expr="N_I图像|图|图形|题意|题|条件|已知|已知条件|上题中|垂径定理|勾股定理" />
+        <synset name="依据条件得到" core_term="依据条件得到"
+                expr="N_I知|可知|得|可得|可证|可得出|可得到|有|从而有|从而可知|从而得到|从而可得到|从而得出|从而可得出" />
+        <synset name="阿拉伯数字" core_term="阿拉伯数字" expr="?@numbernumberGroup#[-+±]?(\d)+(\.(\d)+)?" />
+        <synset name="数字" core_term="数字" expr="?@numberGroup#([-+±]?[0-9]+(\.[0-9]+)?)|零|一|二|两|两个|三|四|五|六|七|八|九|十|百"/>
+        <synset name="数字根号" core_term="数字" expr="?@numberGroupGH#[-+]?\(\(\d+\)\^\(\d+\/\(\d+\)\)\)" />
+        <synset name="数字1" core_term="分数" expr="?@numberGroup1#%expr%|\(\(\d\)\/\(\d\)\)|\d\/\d|\(\d\/\d\)"/>
+       	<synset name="数字2" core_term="根号" expr="?@numberGroupGH#\(\(\d\)\^\(\d\/\(\d\)\)" />
+        <synset name="方向" core_term="平移方向" expr="!?@directionGroup#(沿(着|)y轴|)向上|(沿(着|)y轴|)向下|(沿(着|)x轴|)向左|(沿(着|)x轴|)向右|顺时针|逆时针"/>
+        <synset name="奇偶" core_term="奇偶性" expr="!?@parity#奇|偶|非奇|非偶"/>
+        <synset name="方程" core_term="方程 不等式" expr="!方程|不等式|等式|不等式组|方程组|分式方程"/>
+        <synset name="COMPARESYS" core_term="方程 不等式" expr="!方程|不等式|等式|不等式组|方程组|分式方程"/>
+        <synset name="方程类型" core_term="方程类型" expr="!?@functionType#直线|双曲线|抛物线"/>
+        <synset name="方程号" core_term="解题步骤，方程的标示" expr="!?@exprNumber#①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩|⑪|⑫|⑬|⑭|⑮|⑯|⑰|⑱|⑲|⑳"/>
+        <synset name="是为" core_term="是为" expr="N_I(均|都|)(是|为|作为|记为|等于|=)"/>
+        <synset name="最值" core_term="最大值最小值" expr="!?@extrenum#最大值|最小值|(最大项(的|)值)|(最小项(的|)值)|最大项|最小项"/>
+        <synset name="值" core_term="最大值最小值平均值" expr="!?@expressValue#最大值|最小值|取值范围|取值集合|极大值|极小值|值|取值|长|大小"/>
+        <synset name="极值" core_term="最大值最小值平均值" expr="!?@extremumValue#最大值|最小值|最值|极大值|极小值|极值(点|)"/>
+        <synset name="设值" core_term="值为,值有" expr="!?@assumeValue#值为|值是|值有"/>
+        <synset name="标点" core_term="标点符号" expr="N_I、|,|,|，|:|：|;|；|。|\."/>
+        <synset name="标点1" core_term="标点符号" expr="N_I、|,|，|:|：|;|；|。" />
+        <synset name="标点2" core_term="标点符号" expr="N_I、|,|，|;|；|。" />
+        <synset name="标点3" core_term="标点符号" expr="N_I、|,|，" />
+        <synset name="标点4" core_term="标点符号" expr="N_I,|，|:" />
+        <synset name="问号" core_term="问号符号" expr="!\?|？"/>
+        <synset name="不同" core_term="不同" expr="!不同|不相同|互异|不相等|不等|互不相同"/>
+        <synset name="异同" core_term="相同不相同" expr="!?@isSame#(不同|不相同|互异|不相等|不等|互不相同|相同|相等|一样|同样)"/>
+        <synset name="根数量" core_term="根数量修饰词" expr="!?@modifier#(有且|)(仅|只|恰)有|至少|存在|无解"/>
+        <synset name="根特征" core_term="解的根特征"
+                expr="!?@solutionFeature#(整|有理|无理|实|正|负|正实|负实|非负|非负实|非正|正整|(最小|)负整|非负整|非负数整|偶数|非零实|奇|非正整|正有理|负有理|非负有理|正无理|负无理|非负无理|自然|复|虚|最小整|最大整)(数|)|增(根|)" />
+        <synset name="根符号" core_term="解的根符号" expr="!?@rootFeature#\>|《|≥|≤"/>
+        <synset name="坐标系1" core_term="坐标系"
+                expr="N_I在平面直角坐标平面内|在平面直角坐标系内|在平面直角坐标系中|在平面坐标系中|在直角坐标平面内|在直角坐标系中" />
+        <synset name="梯形类型" core_term="类型" expr="!?@trapezoidType#等腰梯形|等腰直角梯形|直角梯形|梯形"/>
+        <synset name="函数单调类型" core_term="函数单调类型" expr="!?@functionMonoType#增函数|减函数"/>
+        <synset name="次数" core_term="方程次数" expr="!?@degree#二次|一次|三次"/>
+        <synset name="比较" core_term=">|＜|≥|≤|≠|≈" expr="!?@compare#>|＜|≥|≤|≠|≈"/>
+        <synset name="点与圆" core_term="点与圆关系" expr="!?@pointAndCircle#圆内|内|内部|圆外|外|外部|里面|外面|上" />
+        <synset name="由" core_term="由于" expr="!由|由于|化简|将"/>
+        <synset name="相交" core_term="相交" expr="!交|相交|交于|∩|相交于"/>
+        <synset name="相似" core_term="相似" expr="!?@similar#∽|相似"/>
+        <synset name="大或小" core_term="大或小" expr="!?@gtls#大|小"/>
+        <synset name="相切" core_term="内切外切相切" expr="!?@connectType#相切|内切|外切|切"/>
+        <synset name="相切类型" core_term="内切|外切|相切" expr="!?@connectType#内切|外切|相切"/>
+        <synset name="离散属性" core_term="正,负"
+                expr="!?@AtomAttribute#正|负|有理|无理|实|整|零|非负|非正|正整|负整|非负整|偶数|奇数|非正整|正有理|负有理|非负有理|正无理|负无理|非负无理|正实|自然|质|素|合" />
+        <synset name="符号" core_term="符号" expr="!?@symbol#>|《|≥|≤"/>
+        <synset name="线" core_term="直线,射线,为符号" expr="!?@lineType#直线|射线|线段|线|腰|底|斜边|直角边|边|棱|侧棱|对角线|切线|半径|直径|弦|对角线"/>
+        <synset name="线属性" core_term="直线,射线,为符号" expr="!?@lineAttribute#腰|底|斜边|直角边|中线|高(线|)|(角|外角|内角|)平分线|线段|边|中位线"/>
+        <synset name="几何属性" core_term="四边形,三角形" expr="!?@geoAttribute#腰|中位线|宽|高"/>
+        <synset name="线1" core_term="直线,线段" expr="!?@lineType#直线|射线|线段|线|边|对角线|弦" />
+        <synset name="线2" core_term="表示直线" expr="!?@lineType#直线|线|边|对角线|弦|棱|侧棱" />
+        <synset name="即" core_term="即" expr="N_I即" />
+        <synset name="故" core_term="故" expr="N_I故|此|这个" />
+        <synset name="延长" core_term="延长" expr="!延长" />
+        <synset name="延长连接" core_term="连接" expr="!连接|连结|连|延长" />
+        <synset name="轴" core_term="长轴" expr="!?@axisType#短轴|长轴"/>
+        <synset name="任意或存在" core_term="命题" expr="!?@anyOrExist#任意|存在"/>
+        <synset name="命题操作" core_term="命题操作" expr="!?@operator#否定|否命题|逆命题|逆否命题"/>
+        <synset name="真假命题" core_term="命题操作" expr="!?@trueOrFalse#真命题|假命题"/>
+        <synset name="面" core_term="面" expr="!?@PlaneType#面|平面|底面|侧面"/>
+        <synset name="非线段" core_term="直线,射线,为符号" expr="!?@lineType#直线|射线|线|边|棱|对角线"/>
+        <synset name="点" core_term="点" expr="!?@point#点"/>
+        <synset name="表达式单位" core_term="度，厘米"
+                expr="!?@unit#m/min|km/h|m/s|厘米|cm|米|m|千米|km|万米|海里|秒|s|分钟|分|min|小时|h|天|元|万元|人|万人|口|棵|颗|千克|kg|克|g|吨|万吨|条|度|°|本|平方米|m\^\(2\)|m\^2|立方米|m\^\(3\)|m\^3|间|件|个|盏" />
+        <synset name="长度单位" core_term="度，厘米" expr="!?@unit#m/min|km/h|m/s|厘米|cm|米|m|千米|km|万米|海里" />
+        <synset name="解" core_term="解 解集" expr="!根|解|解集|解为|解集为" />
+        <synset name="过点" core_term="过一点" expr="!过|过点|点|从|从点|以|做|作"/>
+        <synset name="过" core_term="过" expr="N_I过|经过|从|通过"/>
+        <synset name="连接" core_term="连接" expr="!连接|连结|连"/>
+        <synset name="逻辑符号" core_term="因为所以" expr="N_I因为|∵|所以|∴|故|则" />
+        <synset name="都" core_term="都过" expr="N_I都|均|经"/>
+        <synset name="里面" core_term="里面|里|内部|内" expr="!里面|里|内部|内"/>
+        <synset name="面积周长" core_term="面积" expr="!?@area#面积|周长"/>
+        <synset name="长" core_term="长|长度" expr="!?@m#长|长度" />
+        <synset name="和差积比" core_term="和差" expr="!?@m#和|差|积" />
+        <synset name="宽" core_term="宽|宽度" expr="!?@n#宽|宽度" />
+        <synset name="前" core_term="前" expr="!?@m#前" />
+        <synset name="后" core_term="后" expr="!?@n#后" />
+        <synset name="甲" core_term="甲" expr="!?@m#甲" />
+        <synset name="乙" core_term="乙" expr="!?@n#乙" />
+        <synset name="是以" core_term="是以" expr="N_I是以" />
+        <synset name="存在" core_term="其中,存在" expr="!其中|存在"/>
+        <synset name="有" core_term="有" expr="N_I有|具有|存在|取得|取到|取|达到|满足"/>
+        <synset name="满足" core_term="满足" expr="!满足"/>
+        <synset name="当" core_term="当" expr="N_I当|但|若"/>
+        <synset name="时" core_term="时" expr="N_I时"/>
+        <synset name="旋转" core_term="旋转" expr="!旋转"/>
+        <synset name="时针旋转" core_term="顺逆时针旋转" expr="!?@spin#(顺时针|逆时针|)(方向|)旋转"/>
+        <synset name="无" core_term="无" expr="!无|没有|无意义"/>
+        <synset name="分式" core_term="分子分母" expr="!分子|分母"/>
+        <synset name="设" core_term="设" expr="N_I设|令"/>
+        <synset name="小问号" core_term="小问号" expr="N_I\(\d\)|（\d）" />
+        <synset name="垂直前" core_term="垂直前面的描述" expr="N_I直线||直径|弦|对角线" />
+        <synset name="中线" core_term="三角形的中线" expr="!中线" />
+        <synset name="高" core_term="高" expr="!高|高线" />
+        <synset name="边" core_term="边 斜边" expr="N_I边|斜边|直角边|腰" />
+        <synset name="同侧" core_term="同侧" expr="N_I同边|同侧" />
+        <synset name="异侧" core_term="异侧" expr="N_I两边|两侧|异侧" />
+        <synset name="共线" core_term="共线" expr="N_I(在|)(同|同一)(一条|)(直线|线段|边)(上)|共线" />
+        <synset name="共圆" core_term="共圆" expr="N_I(在|)(同|同一)(一个|)(圆)(上)|共圆" />
+        <synset name="距离" core_term="距离" expr="N_I距离|离|到" />
+        <synset name="延长线" core_term="延长线" expr="N_I(的|)(反向|)延长线" />
+        <synset name="指代" core_term="指代" expr="这个|那个|此|该|这(条)" />
+        <synset name="指代线" core_term="指代" expr="这条|那条|此|该|该条|此条|这个" />
+        <synset name="实体" core_term="实体" expr="!?@entity#.+" />
+        <!--<synset name="设实体" core_term="应用题中要设的实体" expr="!?@entity#((?!是|是为|为).)*" />-->
+        <synset name="设实体" core_term="应用题中要设的实体" expr="!?@entity#((?!(?:是|是为|为)(?:%)expr(?:%)).)*?" />
+        <synset name="单位后实体" core_term="应用题中要设的实体" expr="!?@afterentity#([^,](?!,))*?" />
+        <synset name="关于" core_term="关于" expr="N_I关于"/>
+        <synset name="等于" core_term="等于" expr="!等于|=|相等|≈"/>
+        <synset name="相反数" core_term="相反数" expr="!相反数"/>
+        <synset name="能" core_term="能" expr="!能"/>
+        <synset name="斜率" core_term="斜率" expr="!斜率"/>
+        <synset name="垂足" core_term="垂足" expr="!垂足"/>
+        <synset name="垂直平分线" core_term="垂直平分线" expr="!垂直平分线|中垂线|垂直平分"/>
+        <synset name="不能" core_term="不能" expr="!不能|不可能|不在"/>
+        <synset name="吗" core_term="吗" expr="!吗"/>
+        <synset name="已知可知" core_term="已知或可知" expr="N_I已知|可知" />
+        <synset name="又" core_term="又" expr="N_I又" />
+        <synset name="已知" core_term="已知" expr="N_I已知"/>
+        <synset name="分别" core_term="分别" expr="N_I分别|都|各|"/>
+        <synset name="仍" core_term="仍然" expr="N_I仍|仍然|"/>
+        <synset name="是" core_term="是" expr="N_I是"/>
+        <synset name="综上" core_term="综上" expr="N_I综上|综上所述|综合所述"/>
+        <synset name="的" core_term="的" expr="N_I的|之|得|"/>
+        <synset name="式" core_term="式" expr="N_I式"/>
+        <synset name="若" core_term="若" expr="N_I若" />
+        <synset name="省略号" core_term="省略号" expr="!?@apos#(\.\.\.)|(\·\·\·)" />
+        <synset name="计算" core_term="计算" expr="N_I计算" />
+        <synset name="适合" core_term="适合" expr="N_I适合" />
+        <synset name="理由如下" core_term="理由如下" expr="N_I理由如下:|理由如下"/>
+        <synset name="度" core_term="度" expr="N_I度|°"/>
+        <synset name="数" core_term="数" expr="N_I(纯|)(整|实|虚|正|负|)数"/>
+        <synset name="证明" core_term="证明" expr="N_I证明|求证|说明"/>
+        <synset name="根据题意" core_term="根据题意" expr="N_I根据题意"/>
+        <synset name="UNSURE" core_term="根据题意" expr="N_I是否|是否是|是不是"/>
+        <synset name="能否" core_term="根据题意" expr="N_I能否|能不能"/>
+        <synset name="句头" core_term="句头"
+                expr="N_I(解|证明|已知)(:|：)(\(\d\)|（\d）|)如图(\d|)(,|，)|(解|证明)(:|：|)(\(\d\)|（\d）|)(因为|∵|所以|∴|)|如图(\d|)(,|，)|(又|)(因为|∵|所以|∴)|解(:|：)|即(:|：|)" />
+        <synset name="解析式" core_term="解析式" expr="!解析式|表达式|关系式" />
+        <synset name="式子" core_term="式子" expr="!解析式|表达式|关系式|因式|多项式|二项式|代数式|分式|式子|算式" />
+        <synset name="代数属性" core_term="表达式的属性" expr="!?@exprProperty#幂|底|最高次项系数|公因式|系数|常数项|次数|未知数数量|项数|公因式外的因式" />
+        <synset name="括号" core_term="括号" expr="!\(|\)|）|（"/>
+        <synset name="函数特征" core_term="函数特征"
+                expr="!?@relationCharacter#解析(表达|)式|方程|关系式|表达式|定义域|值域|奇偶性|偶函数|奇函数|非奇非偶函数|周期|最小(正|)周期|最值|最大值|函数最小值|最小值|极值(点|)|极大值|极小值|斜率|开口方向|对称轴(方程|)|顶点|递增区间|递减区间|切线方程|坐标|顶点坐标|初相|相位|振幅|频率|单调(区间|性)"/>
+        <synset name="开口方向" core_term="开口方向" expr="!?@opendirection#(开口|)(向上|朝上|向下|朝下|向左|朝左|向右|朝右)"/>
+        <synset name="统计特征" core_term="数字序列的统计特征" expr="!?@statisticsCharacter#最大(的|)(数|值)||最小(的|)(数|值)|平均数|方差|众数|众位数"/>
+        <synset name="单调性" core_term="函数单调性" expr="!?@functionMonotonic#单调(性|)|(单调|单|)(递|)增(加|)|(单调|单|)(递|)减(少|)"/>
+        <synset name="圆锥曲线" core_term="圆锥曲线" expr="!?@conicCurve#椭圆|双曲线|抛物线"/>
+        <synset name="否定" core_term="否定" expr="!?@not#不能|不(在|是|)"/>
+        <synset name="图形关系" core_term="垂直平行相交" expr="N_I?@graphRelationType#垂直|垂直于|平行|相交|⊥|∥|重合|共面"/>
+        <synset name="F_NAME" core_term="函数名" expr="!?@functionName#f\(x\)|g\(x\)"/>
+        <synset name="RANGE" core_term="区间" expr="!?@range#区间(\(|\[)[0-9]+,[0-9](\)|\])"/>
+        <synset name="区间" core_term="开闭区间" expr="N_I(开|闭|半开半闭|)区间"/>
+        <synset name="MONOTONICITY" core_term="单调性" expr="!?@monotonicity#单调区间|(单调|单|)(递|)减(区间|函数|)|(单调|单|)(递|)增(区间|函数|)|单调(性|)|单调增加|单调减少"/>
+        <synset name="IS" core_term="是" expr="N_I是|为|作为|记为|等于|="/>
+        <synset name="action" core_term="import" expr="!|action.dict"/>
+        <synset name="内外关系" core_term="内外" expr="N_I?@InOutRelationType#((上|里|内|外)(面|部|))|(是|不是)|(∈|∉|⊄|⊆|⊂)"/>
+        <synset name="多面体" core_term="多面体类型" expr="!?@polyhedronType#((正|长)方体)|((直|正|斜|)((三|四|五|六|)棱(柱|锥|台)|四面体|五面体))|多面体"/>
+        <synset name="多面体1" core_term="多面体类型1" expr="!?@polyhedronType1#(直|正|斜|)((三|四|五|六|)棱柱)"/>
+        <synset name="旋转体" core_term="旋转体类型" expr="!?@rotatorType#(球|圆柱|圆锥|圆台)(体|)"/>
+        <synset name="复数属性" core_term="复数实部虚部" expr="!?@complex#实部|虚部|复平面(所|中)对应的点(的坐标|)|对应的点(的坐标|)|复平面中对应点所在象限|化简结果|模"/>
+        <synset name="复数特征" core_term="实部虚部模点象限" expr="!?@complexCharacter#实部|虚部|点|象限|模"/>
+        <synset name="复平面" core_term="复平面" expr="N_I复平面(上|内|)"/>
+        <synset name="立体几何计算" core_term="立体几何计算" expr="!?@solidCalculate#周长|面积|体积|底面积|表面积|侧面积|底面周长|最长棱|最短棱|侧面积最大|侧面积最小"/>
+        <synset name="填空标志" core_term="填空标志" expr="N_I((=|)_+)"/>
+        <synset name="曲线解析式" core_term="曲线解析式" expr="N_I方程|解析式|标准式|标准方程"/>
+        <synset name="属于" core_term="属于" expr="!?@belong#属于|∈"/>
+        <synset name="不属于" core_term="不属于" expr="!?@belong#不属于|∉"/>
+        <synset name="特殊集合" core_term="特殊集合" expr="!?@specialSet#R|C|Z|N|∅|整数集|自然数集|实数集|奇数集|偶数集|空集"/>
+        <synset name="圆锥曲线特征" core_term="圆锥曲线特征" expr="!?@conicCharacter#(标准|)方程|顶点(的坐标|)|顶点坐标|离心率|左准线|准线方程|左准线方程|右准线方程|右准线|准线|长半轴长|长轴长|短半轴长|短轴长|实半轴长|虚半轴长|焦点|实轴(长|)|虚轴(长|)|渐近线|渐近线方程|焦距"/>
+         <synset name="直线特征" core_term="直线特征" expr="!?@lineCharacter#解析式"/>
+        <synset name="象限" core_term="象限" expr="!?@quadrant#(第|)(一|二|三|四)象限"/>
+        <synset name="二元关系" core_term="比较" expr="!?@compare#大于|小于|等于|大于等于|小于等于|大|小|约等|约等于"/>
+        <synset name="解关系" core_term="两个解之间的关系" expr="!?@solutionRelation#等于|相同|相等|小于|大于|满足|大|小|包含|包含于|属于|不相交|大|小"/>
+        <synset name="充要条件" core_term="充要条件" expr="!?@causalType#(必要|充分|充要|充分必要|充分(而|且|但|)(不|非)必要|必要(而|且|但|)(不|非)充分|(既|)(不|非)充分(条件|)(也|又|)(不|非)(是|)必要)(的|)条件"/>
+        <synset name="数列" core_term="数列类型" expr="!?@sequenceType#((无穷|)(等比|等差|)数列)"/>
+        <synset name="数列中项" core_term="中项类型" expr="!?@MeansType#(等比|等差)中项"/>
+        <synset name="数列求值" core_term="数列求值" expr="!?@sequenceValue#前n项和|通项(公式|式|)|公比|公差|首项"/>
+        <synset name="对称轴" core_term="对称轴" expr="!?@symmetryType#原点|x轴|y轴"/>
+        <synset name="坐标" core_term="坐标" expr="!?@coordinateType#横坐标|纵坐标"/>
+        <synset name="平移" core_term="平移" expr="!?@transType#(沿(着|)y轴|)向上平移|(沿(着|)y轴|)向下平移|(沿(着|)x轴|)向左平移|(沿(着|)x轴|)向右平移|向左平行移动|向右平行移动"/>
+        <synset name="移动" core_term="移动" expr="!移动|滑动|平移|动"/>
+        <synset name="伸缩" core_term="伸缩" expr="!?@scalingType#横坐标伸长|横坐标缩短|纵坐标伸长|纵坐标缩短"/>
+        <synset name="求" core_term="求" expr="!(试|请|请试|先|)(直接|)(求|写|问|确定|回答|讨论|判断|判定|判别|断定|(试|请|请试)得出|(试|请|请试)得到|研究|试求|猜想|猜测|推测|推|估计|探索|探究|探求|指|计算|推导)(出|)"/>
+        <synset name="增减" core_term="增减" expr="!?@monoto#递增|递减|(单调(递|)增)|(单调(递|)减)"/>
+        <synset name="大小" core_term="大小" expr="N_I(大小|度数|值)"/>
+        <synset name="上内" core_term="上内" expr="N_I(上|内|处|)"/>
+        <synset name="含" core_term="含" expr="N_I(含|包含|含有)"/>
+        <synset name="集合" core_term="集合" expr="!集合|全集"/>
+        <synset name="元素属性" core_term="元素属性" expr="!?@elementAttribute#最大元素|最小元素|最大整数(元素|)|最小整数(元素|)"/>
+        <synset name="函数" core_term="函数" expr="!(函数|曲线)"/>
+        <synset name="函数1" core_term="函数" expr="!?@functionType#(函数|曲线|二次函数|一次函数|正比例函数|反比例函数|指数函数|幂函数|复合函数|分段函数)"/>
+        <synset name="夹角" core_term="夹角" expr="!(夹角|所成角|所构成角|所成的角)"/>
+        <synset name="向量" core_term="向量" expr="!?@vectorType#(单位|平面|非零|)向量"/>
+        <synset name="零点" core_term="零点" expr="!(零点|实数解|实解|根)"/>
+        <synset name="集合值" core_term="集合元素子集真子集" expr="!?@setValue#元素|子集|真子集|非空子集|非空真子集|值"/>
+        <synset name="子集" core_term="子集" expr="!?@subSet#子集|真子集|非空子集|非空真子集"/>
+        <synset name="句头1synset" core_term="句头1" expr="N_I答|解|证明|证|求|求证|化简并求值|又" />
+        <synset name="句头2synset" core_term="句头2"
+                expr="N_I证明|已知|又|整理|移项整理|移项|如图|如图1|如图2|如图所示|理由如下|理由是|同理|此时|若|如|如果|即|解:(1)如图(1)所示|因为|∵" />
+        <synset name="叙述" core_term="小问号后的叙述" expr="N_I猜想" />
+        <synset name="舍去" core_term="不合题意舍去" expr="!\((不(符)?合题意,)?舍去\)" />
+        <synset name="不合题意" core_term="不合题意" expr="!不(符)?合题意" />
+        <synset name="自己" core_term="自己" expr="!本身|自身|自己" />
+        <synset name="digit" core_term="数位" expr="!?@digit#个位|十位|百位|千位"/>
+        <!-- 应用题synset -->
+        <synset name="职业" core_term="职业" expr="!?@profession#老师|学生|同学|教师" />
+        <synset name="商品属性" core_term="商品属性" expr="!?@price#单价|售价" />
+        <!-- 应用题synset -->
+        <synset name="设AND" core_term="和,与,为符号" expr="N_I和|与|,|，|、" />
+        <!-- 填空题synset -->
+        <synset name="填空题关键词" core_term="填空题关键词" expr="!?@fillBlankKeyWord#无数|分母" />
+
+        <synset name="整数或小数" core_term="表示数的整数部分或小数部分" expr="!?@part#整数|小数" />
+        <synset name="数的类型" core_term="数的类型" expr="!?@numberType#(整数|分数|正数|负数|自然数|非负数|非正数|小数|有理数|无理数|正整数|负整数|非负整数|非正整数|负分数|正分数|实数|正实数|负实数)"/>
+
+        <synset name="数轴表示" core_term="在数轴上表示出来" expr="!表示在数轴上|在数轴上表示|在数轴上表示出来" />
+    </synsets>
+
+
+    <adhesiveSet>
+        <adhesive syn_name="乘以"/>
+        <adhesive syn_name="垂直"/>
+        <adhesive syn_name="平行"/>
+        <adhesive exp="≅"/>
+        <adhesive syn_name="交于"/>
+    </adhesiveSet>
+
+
+
+    <setenceHeads1>
+        <setenceHead name="句首" core_term="句首" expr="若|如果|该|这个|此|对|在(已|)|已知(:|：|)|那么|(设(：|:|))|当|且当|则(当|此|该|这个)|并且|且|并|以|使(得|)|则|记|如图所示|(现|)存在|对于|再|试"/>
+        <setenceHead name="句头" core_term="句头"
+                     expr="(答|解|又)?(已知|又|整理|移项整理|移项|设该|如图|在图中|如图1|如图2|如图所示|理由如下|理由是|同理|此时|若|如|如果|即|解:(1)如图(1)所示|因为|∵)?(由|则由|根据|依据|依|据|如图)?(图像|图|图形|题意|题|条件|已知|已知条件|上题中|垂径定理|勾股定理)?(知|可知|得|可得|可证|(可|)得出|可得到|有|从而有|从而可知|从而得到|从而可得到|从而得出|从而可得出)?(在平面直角坐标平面内|在平面直角坐标系内|在平面直角坐标系中|在平面坐标系中|在直角坐标平面内)?(\(\d\)|（\d）)?(猜想)?(、|,|,|，|:|：|;|；|。|\.)?(因为|∵|所以|∴|故|则|其|及其)?" />
+
+
+
+        <!--<setenceHead name="句头2" core_term="句头"-->
+                     <!--expr="(#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系1#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?" />-->
+        <!--<setenceHead name="句头3" core_term="句头"-->
+                     <!--expr="(#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系1#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?" />-->
+        <!--<setenceHead name="句头4" core_term="句头"-->
+                     <!--expr="(#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系1#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?" />-->
+
+
+    </setenceHeads1>
+    	<setenceHeads2>
+		<!--<setenceHead name="句头" core_term="句头" expr="(解|证明)(:|：)(\(\d\)(\.|)|（\d）(\.|)|)如图(\d|)(,|，)|(解|证明)(:|：|)(\(\d\)(\.|)|（\d）(\.|)|)(因为|∵|所以|∴|)|如图(\d|)(,|，)|(又|)(因为|∵|所以|∴)|解(:|：)|即(:|：|)"/> -->
+		<!--<setenceHead name="句头" core_term="句头" expr="\(\d\)(解|证明):(如图,|#逻辑符号#)|(解|证明|已知):(\(\d\)(\.|)|（\d）(\.|)|)如图(\d|),|(解|证明)(:|)(\(\d\)(\.|)|（\d）(\.|)|)(因为|∵|所以|∴|)|如图(\d|),|(又|)(因为|∵|所以|∴)|解:|即(:|)|(求证|解)(:)"/> -->
+		<!--<setenceHead name="句头2" core_term="句头2" expr="\(\d\)"/> -->
+		<!--<setenceHead name="句头3" core_term="句头3" expr="(依题意|由题意得|根据题意|同理|由题意可知|如图),"/> -->
+		<!--<setenceHead name="句头4" core_term="句头4" expr="答:"/> -->
+		<!--<setenceHead name="句首" core_term="证明,句尾无用的词" expr="N_I证明|求证|化简并求值:|如图|解|如图所示|理由如下:|理由如下|根据题意|求|又|已知|在平面直角坐标平面内|在平面直角坐标系内|在平面直角坐标系中|在平面坐标系中|在直角坐标平面内,"/> -->
+
+		<setenceHead name="句头1" core_term="句头"
+			expr="((#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?){0,4}" />
+		<!--<setenceHead name="句头2" core_term="句头"-->
+			<!--expr="(#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?" />-->
+		<!--<setenceHead name="句头3" core_term="句头"-->
+			<!--expr="(#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?" />-->
+		<!--<setenceHead name="句头4" core_term="句头"-->
+			<!--expr="(#句头1synset#)?(#句头2synset#)?(#依据#)?(#数字2#)?(#依据条件#)?(#依据条件得到#)?(#坐标系#)?(#小问号#)?(#叙述#)?(#标点#)?(#逻辑符号#)?" />-->
+	</setenceHeads2>
+
+</templates>
