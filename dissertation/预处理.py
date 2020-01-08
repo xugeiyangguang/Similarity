@@ -7,7 +7,7 @@ import csv
 
 # from dissertation.提取知识点及关键字 import getword
 
-jieba.load_userdict("NewDict.txt")  # 加载用户自定义词典
+jieba.load_userdict("C:/Users/27124/PycharmProjects/Similarity/dissertation/NewDict.txt")  # 加载用户自定义词典
 
 # 从cvs文件读取数据
 # 显示所有列
@@ -35,7 +35,7 @@ print("关键词(未经过分词)共有：",len(keyword))
 # 1.分词
 
 # 将停用词表从文件读出，并切分成一个数组备用
-stopWords_dic = open('stop_words.txt', 'r', encoding="utf-8")  # 从文件中读入停用词
+stopWords_dic = open('C:/Users/27124/PycharmProjects/Similarity/dissertation/stop_words.txt', 'r', encoding="utf-8")  # 从文件中读入停用词
 stopWords_content = stopWords_dic.read()
 stopWords_list = stopWords_content.splitlines()  # 转为list备用
 stopWords_dic.close()

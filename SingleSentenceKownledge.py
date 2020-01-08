@@ -12,7 +12,7 @@ from dissertation.预处理 import *
 from dissertation.分词 import fliterWords
 
 # 将测试的句子进行分词
-test_file = open('test.txt', 'r', encoding="utf-8")
+test_file = open('C:/Users/27124/PycharmProjects/Similarity/dissertation/test.txt', 'r', encoding="utf-8")
 test_content = test_file.read()
 print("测试的句子是：", test_content)
 #用户自定义的关键词文档要和知识点的关键词一样

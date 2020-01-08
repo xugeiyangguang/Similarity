@@ -1,0 +1,1 @@
+python C:/Users/27124/PycharmProjects/Similarity/SingleSentenceKownledge.py

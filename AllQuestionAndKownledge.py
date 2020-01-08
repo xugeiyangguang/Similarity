@@ -8,6 +8,7 @@ import os
 import csv
 from dissertation.预处理 import *
 from dissertation.分词 import fliterWords
+#import sys.path.append(’引用模块的地址')
 
 
 # 把所有题目中的关键词搜集起来
