@@ -18,19 +18,31 @@ pd.set_option('display.max_rows', None)
 pd.set_option('max_colwidth', 100)
 
 kown_list = []
-tmp = pd.read_csv('C:/Users/27124/Desktop/毕业论文/dissertation/初等数学知识点运行版.csv', encoding='utf-8')[["名称", "关键字"]]
+tmp = pd.read_csv('C:/Users/27124/Desktop/毕业论文/dissertation/初等数学知识点运行版.csv', encoding='utf-8')[["名称", "关键字", "权重"]]
 kown_list.append(tmp)
 kownledges = pd.concat(kown_list)
 
+
+# 将经过分词后的知识点单个分词写入文件中
+KownledgeCutDict = open('C:/Users/27124/Desktop/毕业论文/dissertation/题目的关键词.csv', 'w', encoding="utf-8", newline="")
+KownledgeCutDictWrite = csv.writer(KownledgeCutDict)
+KownledgeCutDictWrite.writerow(["题目关键词"])
+weighMap={}
+weighList = []
 word = []
 keyword = []
+
 for index, row in kownledges.iterrows():
     word = row[1]
     tmp_words = word.split('，')
     for i in range(len(tmp_words)):
         keyword.append(tmp_words[i])
 
-print("关键词(未经过分词)共有：",len(keyword))
+    weighMap[row[0]]=row[2]  #知识点到权重的对应表
+    weighList.append(row[2])
+# print("关键词(经过分词)共有：",len(keyword))
+KownledgeCutDictWrite.writerow(keyword)
+
 
 # 1.分词
 
@@ -44,6 +56,14 @@ stopWords_dic.close()
 doc_list = []  # 未分词
 all_doc_list = []  # 以分词
 kownledge = []  # 保存知识点名称
+
+kown = []   #知识点名称
+txt_cut = []   #知识点名称分词后的结果
+kownDict={}
+
+csvfileKownDict = open('C:/Users/27124/Desktop/毕业论文/dissertation/知识点分词的结果.csv', 'w', encoding="utf-8", newline="")
+csv_writerDict = csv.writer(csvfileKownDict)
+csv_writerDict.writerow(["知识点","分词结果"])
 for index, row in kownledges.iterrows():
     # print(row["content"])
     kown = str(row["名称"]).encode("utf-8")
@@ -58,13 +78,23 @@ for index, row in kownledges.iterrows():
  #   txt_cut = [word for word in jieba.cut(txt_encode) if word not in stopWords_list]  # 切词   切为列表
     #去除数字，字母表达式等与题目无关的变量等
     # txt_cut1 = [word for word in txt_cut if re.match("([\u4E00-\u9FA5]+)|sin|cos|log|cot|lim|dx|in|notin", word)]
+    kownDict[kown]=txt_cut
+
+    kownList = []
+    kownList.append(str(row["名称"]))
+    kownList.append(txt_cut)
+    csv_writerDict.writerow(kownList)
+
+
     all_doc_list.append(txt_cut)
+
+
 
 # 2.制作语料库
 dictionary = corpora.Dictionary(all_doc_list)  # 用dictionary方法获取词袋（bag-of-words)
 
 dictionary.keys()  # 词袋中用数字对所有词进行了编号
 dictionary.token2id  # 编号与词之间的对应关系
-print("特征词的个数为", len(dictionary.keys()))
+# print("特征词的个数为", len(dictionary.keys()))
 corpus = [dictionary.doc2bow(doc) for doc in all_doc_list]  # 使用doc2bow制作语料库
 tfidf = models.TfidfModel(corpus)  # 使用TF-IDF模型对语料库建模

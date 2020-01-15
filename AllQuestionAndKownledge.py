@@ -20,13 +20,13 @@ from dissertation.分词 import fliterWords
 
 
 # 打开写入的文件
-csvfile = open('C:/Users/27124/Desktop/毕业论文/dissertation/知识点汇总.csv', 'w', encoding="utf-8", newline="")
+csvfile = open('C:/Users/27124/Desktop/毕业论文/dissertation/知识点汇总1.csv', 'w', encoding="utf-8", newline="")
 csv_writer = csv.writer(csvfile)
 csv_writer.writerow(["题目", "题目分词结果", "知识点1", "知识点2", "知识点3"])
 # 打开题库
-f = open('C:/Users/27124/Desktop/毕业论文/dissertation/questions1.csv', 'rb')
-question = pd.read_csv(f, encoding='gb18030')
-question["content"] = question["题目1"].map(str) + "," + question["题目2"].map(str)  # 将包含的两列内容联合起来 第9列
+f = open('C:/Users/27124/Desktop/毕业论文/dissertation/questions.csv', 'rb')
+question = pd.read_csv(f, encoding='utf-8')
+question["content"] = question["题目1"].map(str) + "，" + question["题目2"].map(str)  # 将包含的两列内容联合起来 第9列
 print("开始输出所有题目的相似考点到“知识点汇总中.csv”文件中")
 for index, row in question.iterrows():
     txt_encode = row["content"].encode('utf-8')
@@ -46,6 +46,8 @@ for index, row in question.iterrows():
 
     simss = []
     for i in range(len(sims)):
+        if sims[i] != 0:
+            sims[i] += weighList[i]
         simss.append(sims[i])  # 将每个句子对应的相似度放在列表中
 
     result = dict(zip(kownledge, simss))  # 将相似度和对应题目组合成为字典
