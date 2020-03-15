@@ -1,23 +1,26 @@
-#-*-coding:GBK -*-
+# -*-coding:GBK -*-
 # 输出某单个题目的知识点
 import jieba
-from gensim import corpora,models,similarities
+from gensim import corpora, models, similarities
 # from AllQuestionAndKownledge import keyword
-#from .AllQuestionAndKownledge import keyword
+# from .AllQuestionAndKownledge import keyword
 import pandas as pd
 import re
 import os
 import csv
+
+from pip._vendor.distlib.compat import raw_input
+
 from dissertation.预处理 import *
 from dissertation.分词 import fliterWords
 
 # 将测试的句子进行分词
 test_file = open('C:/Users/27124/PycharmProjects/Similarity/dissertation/test.txt', 'r', encoding="utf-8")
 test_content = test_file.read()
-#str = raw_input("请输入：")
+# test_content = raw_input("请输入：")
 print("测试的句子是：", test_content)
-#用户自定义的关键词文档要和知识点的关键词一样
-doc_test_list2=fliterWords(test_content,keyword)
+# 用户自定义的关键词文档要和知识点的关键词一样
+doc_test_list2 = fliterWords(test_content, keyword)
 
 print("测试句子分词的结果是：", doc_test_list2)
 doc_test_vec = dictionary.doc2bow(doc_test_list2)  # 将测试句子也转换为稀疏向量
@@ -31,31 +34,26 @@ sims = index[tfidf[doc_test_vec]]
 
 simss = []
 for i in range(len(sims)):
-    if sims[i]!=0:
-        sims[i]+=weighList[i]
-    simss.append(sims[i])      # 将每个句子对应的相似度放在列表中
+    if sims[i] != 0:
+        sims[i] += weighList[i]
+    simss.append(sims[i])  # 将每个句子对应的相似度放在列表中
 
 print("最终的结果是（文本和相似度对应）：")
-re = dict(zip(kownledge, simss))   # 将相似度和对应题目组合成为字典
-d_order=sorted(re.items(), key=lambda x:x[1], reverse=True)
+re = dict(zip(kownledge, simss))  # 将相似度和对应题目组合成为字典
+d_order = sorted(re.items(), key=lambda x: x[1], reverse=True)
 for i in range(10):
-    print(d_order[i],end="")
+    print(d_order[i], end="")
     print(kownDict[(d_order[i][0]).encode("utf-8")])
 
+baseKownledge = []
+for i in range(3):
+    baseKownledge.append(d_order[i][0])
 
+print(baseKownledge)
 '''
 print("排序后的结果")
 re2 = sorted(enumerate(sims), key=lambda item: -item[1])   # 根据相似度排序
 for i in range(3):
     print(re2[i])
 '''
-
-
-
-
-
-
-
-
-
 
