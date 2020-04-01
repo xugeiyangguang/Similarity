@@ -1,5 +1,5 @@
 # -*-coding:GBK -*-
-# 将题库所有题目“questions1”和其相应的知识点输出到“知识点汇总中”
+# 将题库所有题目“questions1”和其相应的知识点输出到“知识点汇总”
 import jieba
 from gensim import corpora, models, similarities
 import pandas as pd

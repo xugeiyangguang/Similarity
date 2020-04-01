@@ -1,1 +1,1 @@
-已知正方形$ABCD$的边长为$2$，$E$为$CD$的中点，则$向量{AE}\cdot 向量{BD}$=_____.，nan
+已知各项均不为零的数列$\{a_{n}\}$，定义向量$c_{n}=(a_{n}，a_{n+1})$，$b_{n}=(n，n+1)$，$n\in N^*$，下列命题中真命题是( )A、若$\forall n\in N^*$总有$c_{n}\parallel b_{n}$成立，数列${a_{n}}$是等差数列#%#B、若$\forall n\in N^*$总有$c_{n}\parallel b_{n}$成立，数列${a_{n}}$是等比数列#%#C、C.若$\forall n\in N^*$总有$c_{n}\perp b_{n}$成立，数列${a_{n}}$是等差数列#%#D、D.若$\forall n\in N^*$总有$c_{n}\perp b_{n}$成立，则数列${a_{n}}$是等比数列#%#
